@@ -8,7 +8,7 @@
   <version>0.0.1.$Revision: 1 $(beta)</version>
   <documentation-url>http://www.slicer.org/slicerWiki/index.php/Modules:UnbiasedNonLocalMeans-Documentation-3.6</documentation-url>
   <license></license>
-  <contributor>Antonio Tristan Vega, Veronica Garcia-Perez, Santiago Aja-Fernandez
+  <contributor>Antonio Tristan Vega, Veronica Garcia-Perez, Santiago Aja-Fernandez, Carl-Fredrik Westin
   </contributor>
   <acknowledgements>Supported by grant number FMECD-2010/71131616E from the Spanish Ministry of Education/Fulbright Committee
   </acknowledgements>
