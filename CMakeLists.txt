@@ -36,6 +36,12 @@ else( Slicer_SOURCE_DIR )
 endif (Slicer_SOURCE_DIR)
 ################################################################################
 
+OPTION(BUILD_CMPB_VERSIONS "Build the exact same source code used for the CMPB paper" OFF)
+if( BUILD_CMPB_VERSIONS )
+    ADD_SUBDIRECTORY( cmpb.source.code )
+endif( BUILD_CMPB_VERSIONS )
+
+
 if(NOT ITK_FOUND)
     find_package(ITK REQUIRED)
     include(${ITK_USE_FILE})
