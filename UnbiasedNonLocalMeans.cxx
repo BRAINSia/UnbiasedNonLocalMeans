@@ -1,16 +1,16 @@
 /*=========================================================================
-
-  Program:   Diffusion Applications
-  Language:  C++
-  Module:    $HeadURL: http://svn.slicer.org/Slicer3/trunk/Applications/CLI/DiffusionApplications/dwiNoiseFilter/dwiNoiseFilter.cxx $
-  Date:      $Date: 2008-11-25 18:46:58 +0100 (Tue, 25 Nov 2008) $
-  Version:   $Revision: 7972 $
-
-  Copyright (c) Brigham and Women's Hospital (BWH) All Rights Reserved.
-
-  See License.txt or http://www.slicer.org/copyright/copyright.txt for details.
-
-==========================================================================*/
+ 
+ Program:   Diffusion Applications
+ Language:  C++
+ Module:    $HeadURL: http://svn.slicer.org/Slicer3/trunk/Applications/CLI/DiffusionApplications/dwiNoiseFilter/dwiNoiseFilter.cxx $
+ Date:      $Date: 2008-11-25 18:46:58 +0100 (Tue, 25 Nov 2008) $
+ Version:   $Revision: 7972 $
+ 
+ Copyright (c) Brigham and Women's Hospital (BWH) All Rights Reserved.
+ 
+ See License.txt or http://www.slicer.org/copyright/copyright.txt for details.
+ 
+ ==========================================================================*/
 
 #ifdef _WIN32
 // to pick up M_SQRT2 and other nice things...
@@ -19,6 +19,8 @@
 #include <math.h>
 #ifdef THISISASLICERBUILD
 #include "itkPluginUtilities.h"
+#else
+#include "SlicerExecutionModel/itkPluginUtilities.h"
 #endif
 #include <itkImageFileWriter.h>
 #include <itkImageFileReader.h>
@@ -40,6 +42,7 @@ template<class PixelType>
 int DoIt( int argc, const char * argv[], PixelType )
 {
 	PARSE_ARGS;
+    
 	// do the typedefs
 	typedef itk::Image<PixelType,DIMENSION> ImageType;
 	
@@ -116,60 +119,56 @@ int main( int argc, const char * argv[] )
 {
     
     PARSE_ARGS;
-
-#ifdef THISISASLICERBUILD
+    
     itk::ImageIOBase::IOPixelType pixelType;
     itk::ImageIOBase::IOComponentType componentType;    
-    itk::GetImageType (inputDWI, pixelType, componentType);
-#else
-    itk::ImageIOBase::IOComponentType componentType = itk::ImageIOBase::USHORT;
-#endif
-
-  // This filter handles all types
+    itk::GetImageType (inputVolume, pixelType, componentType);
     
-  switch (componentType)
+    // This filter handles all types
+    
+    switch (componentType)
     {
 #ifndef WIN32
-    case itk::ImageIOBase::UCHAR:
-      return DoIt( argc, argv, static_cast<unsigned char>(0));
-      break;
-    case itk::ImageIOBase::CHAR:
-      return DoIt( argc, argv, static_cast<char>(0));
-      break;
+        case itk::ImageIOBase::UCHAR:
+            return DoIt( argc, argv, static_cast<unsigned char>(0));
+            break;
+        case itk::ImageIOBase::CHAR:
+            return DoIt( argc, argv, static_cast<char>(0));
+            break;
 #endif
-    case itk::ImageIOBase::USHORT:
-      return DoIt( argc, argv, static_cast<unsigned short>(0));
-      break;
-    case itk::ImageIOBase::SHORT:
-      return DoIt( argc, argv, static_cast<short>(0));
-      break;
-    case itk::ImageIOBase::UINT:
-      return DoIt( argc, argv, static_cast<unsigned int>(0));
-      break;
-    case itk::ImageIOBase::INT:
-      return DoIt( argc, argv, static_cast<int>(0));
-      break;
+        case itk::ImageIOBase::USHORT:
+            return DoIt( argc, argv, static_cast<unsigned short>(0));
+            break;
+        case itk::ImageIOBase::SHORT:
+            return DoIt( argc, argv, static_cast<short>(0));
+            break;
+        case itk::ImageIOBase::UINT:
+            return DoIt( argc, argv, static_cast<unsigned int>(0));
+            break;
+        case itk::ImageIOBase::INT:
+            return DoIt( argc, argv, static_cast<int>(0));
+            break;
 #ifndef WIN32
-    case itk::ImageIOBase::ULONG:
-      return DoIt( argc, argv, static_cast<unsigned long>(0));
-      break;
-    case itk::ImageIOBase::LONG:
-      return DoIt( argc, argv, static_cast<long>(0));
-      break;
+        case itk::ImageIOBase::ULONG:
+            return DoIt( argc, argv, static_cast<unsigned long>(0));
+            break;
+        case itk::ImageIOBase::LONG:
+            return DoIt( argc, argv, static_cast<long>(0));
+            break;
 #endif
-    case itk::ImageIOBase::FLOAT:
-      return DoIt( argc, argv, static_cast<float>(0));
-      break;
-    case itk::ImageIOBase::DOUBLE:
-      std::cout << "DOUBLE type not currently supported." << std::endl;
-      break;
-    case itk::ImageIOBase::UNKNOWNCOMPONENTTYPE:
-    default:
-      std::cout << "unknown component type" << std::endl;
-      break;
+        case itk::ImageIOBase::FLOAT:
+            return DoIt( argc, argv, static_cast<float>(0));
+            break;
+        case itk::ImageIOBase::DOUBLE:
+            std::cout << "DOUBLE type not currently supported." << std::endl;
+            break;
+        case itk::ImageIOBase::UNKNOWNCOMPONENTTYPE:
+        default:
+            std::cout << "unknown component type" << std::endl;
+            break;
     }
-
-  return EXIT_SUCCESS;
+    
+    return EXIT_SUCCESS;
 }
 
 
