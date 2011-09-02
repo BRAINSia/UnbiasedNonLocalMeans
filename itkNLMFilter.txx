@@ -103,7 +103,7 @@ void NLMFilter< TInputImage, TOutputImage >
 	
 template< class TInputImage, class TOutputImage >
 void NLMFilter< TInputImage, TOutputImage >
-::ThreadedGenerateData( const OutputImageRegionType& outputRegionForThread, int threadId )
+::ThreadedGenerateData( const OutputImageRegionType& outputRegionForThread, int )
 {
 	//==================================================================================================================================
 	// Iterators:

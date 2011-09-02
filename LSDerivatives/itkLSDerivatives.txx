@@ -191,7 +191,7 @@ void LSDerivativesL2< ImageDimension >
 //=====================================================================================================	
 template< class TInputImage >
 void LSDerivativesL0< TInputImage >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int )
 {
 	// Boundary conditions for this filter; Neumann conditions are fine
 	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;	
@@ -267,7 +267,7 @@ void LSDerivativesL0< TInputImage >
 //=====================================================================================================	
 template< unsigned int ImageDimension >
 void LSDerivativesL1< ImageDimension >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int )
 {
 	// Boundary conditions for this filter; Neumann conditions are fine
 	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;	
@@ -345,7 +345,7 @@ void LSDerivativesL1< ImageDimension >
 //=====================================================================================================	
 template< unsigned int ImageDimension >
 void LSDerivativesL2< ImageDimension >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int )
 {
 	// Boundary conditions for this filter; Neumann conditions are fine
 	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;	

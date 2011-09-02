@@ -86,7 +86,7 @@ protected:
 	LSDerivativesL0();
 	virtual ~LSDerivativesL0() {}
 	// Threaded filter!
-	void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId );
+	void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int );
 	void BeforeThreadedGenerateData();
 	void GenerateInputRequestedRegion();
 private:
@@ -140,7 +140,7 @@ private:
 		LSDerivativesL1();
 		virtual ~LSDerivativesL1() {}
 		// Threaded filter!
-		void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId );
+		void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int );
 		void BeforeThreadedGenerateData();
 		void GenerateInputRequestedRegion();
 	private:
@@ -194,7 +194,7 @@ private:
 		LSDerivativesL2();
 		virtual ~LSDerivativesL2() {}
 		// Threaded filter!
-		void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId );
+		void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int );
 		void BeforeThreadedGenerateData();
 		void GenerateInputRequestedRegion();
 	private:

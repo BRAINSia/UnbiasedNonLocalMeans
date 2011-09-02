@@ -117,7 +117,6 @@ int DoIt( int argc, const char * argv[], PixelType )
 
 int main( int argc, const char * argv[] )
 {
-    
     PARSE_ARGS;
     
     itk::ImageIOBase::IOPixelType pixelType;

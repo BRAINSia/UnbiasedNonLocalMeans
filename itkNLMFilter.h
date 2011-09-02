@@ -88,7 +88,7 @@ protected:
 	NLMFilter();
 	virtual ~NLMFilter();
 	// Threaded filter!
-	void ThreadedGenerateData( const OutputImageRegionType& outputRegionForThread, int threadId );
+	void ThreadedGenerateData( const OutputImageRegionType& outputRegionForThread, int );
 	void GenerateInputRequestedRegion();
 	void BeforeThreadedGenerateData( void );
 	void PrintSelf( std::ostream &os, Indent indent ) const;
