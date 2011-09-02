@@ -65,18 +65,41 @@ if (BUILD_TESTING)
   
   set(TEST_DATA_DIR ${PROJECT_SOURCE_DIR}/TestData)
   if (Slicer_SOURCE_DIR)
-    set(OUTPUT_DIR ${Slicer3_BINARY_DIR}/Testing)
-    set(Slicer3_EXE ${Slicer3_BINARY_DIR}/Slicer3)
-    SET(RUNEXEC
-        ${Slicer3_EXE}
-        --launch
-        ${CLP}
-    )
-    SET(COMPEXEC
-        ${Slicer3_EXE}
-        --launch
-        ${CLP}_Compare
-    )
+        
+        # This is a Slicer build
+        # Depending on the actual version (3 or 4), the calling sequence differs:
+        if(Slicer3_BINARY_DIR)
+            # This is for Slicer3
+            set(OUTPUT_DIR ${Slicer3_BINARY_DIR}/Testing)
+            set(Slicer_EXE ${Slicer3_BINARY_DIR}/Slicer3)
+            SET(RUNEXEC
+                ${Slicer_EXE}
+                --launch
+                ${CLP}
+            )
+            SET(COMPEXEC
+                ${Slicer_EXE}
+                --launch
+                ${CLP}_Compare
+            )
+        endif(Slicer3_BINARY_DIR)
+        
+        if(Slicer_BINARY_DIR)
+            # And this is for Slicer4. It requires calling the CLI with the full path
+            set(OUTPUT_DIR ${Slicer_BINARY_DIR}/Testing)
+            set(Slicer_EXE ${Slicer_BINARY_DIR}/Slicer)
+            SET(RUNEXEC
+                ${Slicer_EXE}
+                --launch
+                "${Slicer_BINARY_DIR}/plugins/${CLP}"
+            )
+            SET(COMPEXEC
+                ${Slicer_EXE}
+                --launch
+                "${Slicer_BINARY_DIR}/bin/${CLP}_Compare"
+            )
+        endif(Slicer_BINARY_DIR)
+  
   else( Slicer_SOURCE_DIR )
     set(OUTPUT_DIR ${CMAKE_BINARY_DIR}/Testing)
     SET( RUNEXEC ${CMAKE_BINARY_DIR}/${CLP} )
