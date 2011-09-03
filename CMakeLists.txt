@@ -26,7 +26,8 @@ link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_ARCHIVE_OUTPUT_DIRECT
 CHECKIFSLICER3BUILD()  ## Call the convenience macro
 
 if (Slicer_SOURCE_DIR)
-    if(NOT Slicer_BINARY_DIR)
+    if(Slicer_BINARY_DIR)
+    else(Slicer_BINARY_DIR)
         # Slicer_BINARY_DIR only exists for Slicer 4. This flag is only used for Slicer3 builds:
         SET_SOURCE_FILES_PROPERTIES(${PROJECT_NAME}.cxx COMPILE_FLAGS -DTHISISASLICERBUILD=1)
     endif(Slicer_BINARY_DIR)
@@ -66,10 +67,9 @@ if(Slicer_BINARY_DIR) # This variable exits only for Slicer4
     # This is ti tell the .cxx files they must include "localPluginUtilities.h"
     # instead of "itkPluginUtilities.h":
     include_directories( ${Slicer_SOURCE_DIR}/Applications/CLI/DiffusionApplications/DiffusionApplicationsCommon )
-    SET_SOURCE_FILES_PROPERTIES(${${CLP}_SOURCE} COMPILE_FLAGS -DSLICERV4=1)
-    
     set(CLP UnbiasedNonLocalMeans)
     set ( ${CLP}_SOURCE ${CLP}.cxx )
+    SET_SOURCE_FILES_PROPERTIES(${${CLP}_SOURCE} COMPILE_FLAGS -DSLICERV4=1)
     CONFIGURESTANDALONEORSLICERPROPERTIES(${CLP} ${CLP}.xml "${${CLP}_SOURCE}" "")
     target_link_libraries( ${CLP} ITKIO ITKAlgorithms)
     set_target_properties(${CLP}Lib PROPERTIES COMPILE_FLAGS "-Dmain=ModuleEntryPoint")
