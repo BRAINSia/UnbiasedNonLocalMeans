@@ -17,23 +17,31 @@
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
+
+
+
 #ifdef THISISASLICERBUILD
+
 #include "itkPluginUtilities.h"
+
+#else
+
+#ifdef SLICERV4
+#include "localPluginUtilities.h"
 #else
 #include "SlicerExecutionModel/itkPluginUtilities.h"
 #endif
+
+#endif
+
 #include <itkImageFileWriter.h>
 #include <itkImageFileReader.h>
-#include <itkNrrdImageIO.h>
 #include <itkImageRegionIterator.h>
 #include <itkImageRegionConstIteratorWithIndex.h>
 #include "itkCastImageFilter.h"
 #include "UnbiasedNonLocalMeansCLP.h"
 //--------------------------------------------------
 // Specific includes:
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
-#include "itkImage.h"
 #include "itkNLMFilter.h"
 //--------------------------------------------------
 #define DIMENSION 3

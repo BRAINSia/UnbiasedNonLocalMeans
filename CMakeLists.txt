@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 project( UnbiasedNonLocalMeans )
-
 # 
 # --------------------------------------------------------------------------
 # Special build configs (to handle linking on windows)
@@ -23,10 +22,14 @@ SETIFEMPTY(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 SETIFEMPTY(CMAKE_BUNDLE_OUTPUT_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR})
 link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 ###
+
 CHECKIFSLICER3BUILD()  ## Call the convenience macro
 
 if (Slicer_SOURCE_DIR)
-    SET_SOURCE_FILES_PROPERTIES(${CLP}.cxx COMPILE_FLAGS -DTHISISASLICERBUILD=1)
+    if(NOT Slicer_BINARY_DIR)
+        # Slicer_BINARY_DIR only exists for Slicer 4. This flag is only used for Slicer3 builds:
+        SET_SOURCE_FILES_PROPERTIES(${PROJECT_NAME}.cxx COMPILE_FLAGS -DTHISISASLICERBUILD=1)
+    endif(Slicer_BINARY_DIR)
 else( Slicer_SOURCE_DIR )
     ADD_SUBDIRECTORY(SlicerExecutionModel)
     OPTION(BUILD_TESTING "Build tests for this program" ON)
@@ -47,13 +50,41 @@ if(NOT ITK_FOUND)
     include(${ITK_USE_FILE})
 endif(NOT ITK_FOUND)
 
+# For Slicer 4 builds, the standard macro doesn't work for some reason...
+if(Slicer_BINARY_DIR) # This variable exits only for Slicer4
 
-set(CLP UnbiasedNonLocalMeans)
-set ( ${CLP}_SOURCE ${CLP}.cxx )
-CONFIGURESTANDALONEORSLICERPROPERTIES(${CLP} ${CLP}.xml "${${CLP}_SOURCE}" "")
-target_link_libraries( ${CLP} ITKIO ITKAlgorithms)
+    # This doesn't work!
+    #slicerMacroBuildCLI(
+    #    NAME ${PROJECT_NAME}
+    #    LOGO_HEADER ${PROJECT_SOURCE_DIR}/ModuleLogo.h
+    #    TARGET_LIBRARIES ${ITK_LIBRARIES} ModuleDescriptionParser
+    #    LINK_DIRECTORIES ${ModuleDescriptionParser_BINARY_DIR}
+    #    INCLUDE_DIRECTORIES ${SlicerBaseCLI_SOURCE_DIR} ${SlicerBaseCLI_BINARY_DIR}
+    #)
+    
+    
+    # This is ti tell the .cxx files they must include "localPluginUtilities.h"
+    # instead of "itkPluginUtilities.h":
+    include_directories( ${Slicer_SOURCE_DIR}/Applications/CLI/DiffusionApplications/DiffusionApplicationsCommon )
+    SET_SOURCE_FILES_PROPERTIES(${${CLP}_SOURCE} COMPILE_FLAGS -DSLICERV4=1)
+    
+    set(CLP UnbiasedNonLocalMeans)
+    set ( ${CLP}_SOURCE ${CLP}.cxx )
+    CONFIGURESTANDALONEORSLICERPROPERTIES(${CLP} ${CLP}.xml "${${CLP}_SOURCE}" "")
+    target_link_libraries( ${CLP} ITKIO ITKAlgorithms)
+    set_target_properties(${CLP}Lib PROPERTIES COMPILE_FLAGS "-Dmain=ModuleEntryPoint")
+    
+else(Slicer_BINARY_DIR)
+ 
+    set(CLP UnbiasedNonLocalMeans)
+    set ( ${CLP}_SOURCE ${CLP}.cxx )
+    CONFIGURESTANDALONEORSLICERPROPERTIES(${CLP} ${CLP}.xml "${${CLP}_SOURCE}" "")
+    target_link_libraries( ${CLP} ITKIO ITKAlgorithms)
+    
+    INSTALL(TARGETS UnbiasedNonLocalMeans DESTINATION bin)
+ 
+endif(Slicer_BINARY_DIR)
 
-INSTALL(TARGETS UnbiasedNonLocalMeans DESTINATION bin)
 
 if (BUILD_TESTING)
   add_executable(${CLP}_Compare ${CLP}_Compare.cxx)
@@ -105,7 +136,7 @@ if (BUILD_TESTING)
     SET( RUNEXEC ${CMAKE_BINARY_DIR}/${CLP} )
     SET( COMPEXEC ${CMAKE_BINARY_DIR}/${CLP}_Compare )
   endif (Slicer_SOURCE_DIR)
-
+ 
   # This runs the module with testing parameters:
   add_test(${PROJECT_NAME}_SampleTest
     ${RUNEXEC}
@@ -117,12 +148,12 @@ if (BUILD_TESTING)
     ${TEST_DATA_DIR}/t2crop.nii.gz
     ${OUTPUT_DIR}/t2filteredSample.nii.gz
   )
-
+ 
   # This runs a program that checks the output and compares to the one expected:
   add_test(${PROJECT_NAME}_SampleCompare
     ${COMPEXEC}
     ${OUTPUT_DIR}/t2filteredSample.nii.gz
     ${TEST_DATA_DIR}/t2filtered.nii.gz
   )
-
+ 
 endif (BUILD_TESTING)
