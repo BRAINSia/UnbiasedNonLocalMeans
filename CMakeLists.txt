@@ -51,28 +51,19 @@ if(NOT ITK_FOUND)
     include(${ITK_USE_FILE})
 endif(NOT ITK_FOUND)
 
-# For Slicer 4 builds, the standard macro doesn't work for some reason...
+# For Slicer 4 builds, simply call the standard macro:
 if(Slicer_BINARY_DIR) # This variable exits only for Slicer4
 
-    # This doesn't work!
-    #slicerMacroBuildCLI(
-    #    NAME ${PROJECT_NAME}
-    #    LOGO_HEADER ${PROJECT_SOURCE_DIR}/ModuleLogo.h
-    #    TARGET_LIBRARIES ${ITK_LIBRARIES} ModuleDescriptionParser
-    #    LINK_DIRECTORIES ${ModuleDescriptionParser_BINARY_DIR}
-    #    INCLUDE_DIRECTORIES ${SlicerBaseCLI_SOURCE_DIR} ${SlicerBaseCLI_BINARY_DIR}
-    #)
-    
-    
-    # This is ti tell the .cxx files they must include "localPluginUtilities.h"
-    # instead of "itkPluginUtilities.h":
-    include_directories( ${Slicer_SOURCE_DIR}/Applications/CLI/DiffusionApplications/DiffusionApplicationsCommon )
-    set(CLP UnbiasedNonLocalMeans)
-    set ( ${CLP}_SOURCE ${CLP}.cxx )
-    SET_SOURCE_FILES_PROPERTIES(${${CLP}_SOURCE} COMPILE_FLAGS -DSLICERV4=1)
-    CONFIGURESTANDALONEORSLICERPROPERTIES(${CLP} ${CLP}.xml "${${CLP}_SOURCE}" "")
-    target_link_libraries( ${CLP} ITKIO ITKAlgorithms)
-    set_target_properties(${CLP}Lib PROPERTIES COMPILE_FLAGS "-Dmain=ModuleEntryPoint")
+    slicerMacroBuildCLI(
+       NAME ${PROJECT_NAME}
+       LOGO_HEADER ${PROJECT_SOURCE_DIR}/ModuleLogo.h
+       TARGET_LIBRARIES ${ITK_LIBRARIES} ModuleDescriptionParser
+       LINK_DIRECTORIES ${ModuleDescriptionParser_BINARY_DIR}
+       INCLUDE_DIRECTORIES ${SlicerBaseCLI_SOURCE_DIR} ${Slicer_SOURCE_DIR}/Applications/CLI/DiffusionApplications/DiffusionApplicationsCommon
+       ${SlicerBaseCLI_BINARY_DIR}
+    )
+    # This is necessary to tell the main .cxx what kind of build we are using:
+    SET_SOURCE_FILES_PROPERTIES(${PROJECT_NAME}.cxx COMPILE_FLAGS -DSLICERV4=1)
     
 else(Slicer_BINARY_DIR)
  
