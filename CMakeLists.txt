@@ -66,10 +66,13 @@ if(Slicer_BINARY_DIR) # This variable exits only for Slicer4
     SET_SOURCE_FILES_PROPERTIES(${PROJECT_NAME}.cxx COMPILE_FLAGS -DSLICERV4=1)
     
 else(Slicer_BINARY_DIR)
- 
+    set(EXTRA_HEADERS
+        itkNLMFilter.txx
+        LSDerivatives/itkLSDerivatives.txx
+    )
     set(CLP UnbiasedNonLocalMeans)
     set ( ${CLP}_SOURCE ${CLP}.cxx )
-    CONFIGURESTANDALONEORSLICERPROPERTIES(${CLP} ${CLP}.xml "${${CLP}_SOURCE}" "")
+    CONFIGURESTANDALONEORSLICERPROPERTIES(${CLP} ${CLP}.xml "${${CLP}_SOURCE}" "" "${EXTRA_HEADERS}")
     target_link_libraries( ${CLP} ITKIO ITKAlgorithms)
     
     INSTALL(TARGETS UnbiasedNonLocalMeans DESTINATION bin)
