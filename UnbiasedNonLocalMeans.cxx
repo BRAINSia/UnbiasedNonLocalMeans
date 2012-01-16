@@ -27,7 +27,7 @@
 #else
 
 #ifdef SLICERV4
-#include "localPluginUtilities.h"
+#include "Modules/CLI/DiffusionApplications/DiffusionApplicationsCommon/localPluginUtilities.h"
 #else
 #include "SlicerExecutionModel/itkPluginUtilities.h"
 #endif
