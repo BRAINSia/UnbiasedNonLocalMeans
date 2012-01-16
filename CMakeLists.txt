@@ -116,7 +116,7 @@ if (BUILD_TESTING)
             SET(RUNEXEC
                 ${Slicer_EXE}
                 --launch
-                "${Slicer_BINARY_DIR}/plugins/${CLP}"
+                "${Slicer_BINARY_DIR}/lib/Slicer-4.0/cli-modules/${CLP}"
             )
             SET(COMPEXEC
                 ${Slicer_EXE}
