@@ -52,7 +52,7 @@ int main(int argc, char **argv)
    }
    
    if( difference>1e-9 ){
-      std::cerr << "Error is above tolerance (1e-9)";
+      std::cerr << "Error (" << difference << ") is above tolerance (1e-9)";
       return EXIT_FAILURE;
    }
    else{
