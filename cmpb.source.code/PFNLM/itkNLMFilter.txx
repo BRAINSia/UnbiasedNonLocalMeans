@@ -102,10 +102,15 @@ void NLMFilter< TInputImage, TOutputImage >
 	
 	
 template< class TInputImage, class TOutputImage >
+#if ITK_VERSION_MAJOR < 4
 void NLMFilter< TInputImage, TOutputImage >
-::ThreadedGenerateData( const OutputImageRegionType& outputRegionForThread, int threadId )
+::ThreadedGenerateData( const OutputImageRegionType& outputRegionForThread, int itkNotUsed(threadId) )
+#else
+void NLMFilter< TInputImage, TOutputImage >
+::ThreadedGenerateData( const OutputImageRegionType& outputRegionForThread, ThreadIdType itkNotUsed(threadId) )
+#endif
 {
-	//==================================================================================================================================
+	//================================================================================================================================
 	// Iterators:
 	ImageRegionConstIteratorWithIndex<FeaturesMapType> mit;     // Iterator for the map of local featrues
 	ImageRegionIterator<OutputImageType>               it;      // Iterator for the output image
@@ -114,7 +119,7 @@ void NLMFilter< TInputImage, TOutputImage >
 	// Input and output
 	InputImageConstPointer   input   =  this->GetInput();
 	OutputImagePointer       output  =  this->GetOutput();
-	//==================================================================================================================================
+	//================================================================================================================================
 	unsigned int numNeighbours = 1;
 	InputImageSizeType baseSearchSize, searchSize;
 	for( unsigned int d=0; d<TInputImage::ImageDimension; ++d ){ // The number of voxels which are going to be accounted in the WA

@@ -99,7 +99,7 @@ macro(CONFIGURESTANDALONEORSLICERPROPERTIES PROGNAME PROGCLI PROGSOURCES EXTRA_L
   if(WIN32)
     set(STANDALONE_ITK_LIBS "")
   else(WIN32)
-    set(STANDALONE_ITK_LIBS ITKAlgorithms ITKIO ITKBasicFilters)
+    set(STANDALONE_ITK_LIBS ${ITK_LIBRARIES})
   endif(WIN32)
   target_link_libraries (${PROGNAME} ${STANDALONE_ITK_LIBS} ${OPTIONAL_DEBUG_LINK_LIBRARIES} ${EXTRA_LIBS} )
 
@@ -155,7 +155,7 @@ macro(CONFIGURESTANDALONEORSLICERLIBRARY LIBNAME LIBCLI LIBSOURCES EXTRA_LIBS)
     GENERATECLP(CLP_SOURCES ${LIBCLI} )
   endif()
   add_library( ${LIBNAME} ${CLP_SOURCES} ${LIBCLI_HEADER})
-  target_link_libraries (${LIBNAME} ITKAlgorithms ITKIO ITKBasicFilters ${OPTIONAL_DEBUG_LINK_LIBRARIES} ${EXTRA_LIBS} )
+  target_link_libraries (${LIBNAME} ${ITK_LIBRARIES} ${OPTIONAL_DEBUG_LINK_LIBRARIES} ${EXTRA_LIBS} )
 
   if (Slicer_SOURCE_DIR)
     ### If building as part of the Slicer_SOURCE_DIR, then only build the shared object, and not the command line program.

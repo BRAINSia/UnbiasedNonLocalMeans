@@ -78,7 +78,7 @@ public:
 	itkSetMacro( H,          float              );
 	itkGetMacro( H,          float              );
 	itkSetMacro( PSTh,       float              );
-        itkGetMacro( PSTh,       float              );
+    itkGetMacro( PSTh,       float              );
 	itkSetMacro( RSearch,    InputImageSizeType );
 	itkGetMacro( RSearch,    InputImageSizeType );
 	itkSetMacro( RComp,      InputImageSizeType );
@@ -87,8 +87,14 @@ public:
 protected:
 	NLMFilter();
 	virtual ~NLMFilter();
-	// Threaded filter!
-	void ThreadedGenerateData( const OutputImageRegionType& outputRegionForThread, int );
+	// Threaded filter:
+#if ITK_VERSION_MAJOR < 4
+    void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, int threadId );
+    
+#else
+    void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, ThreadIdType threadId );
+    
+#endif
 	void GenerateInputRequestedRegion();
 	void BeforeThreadedGenerateData( void );
 	void PrintSelf( std::ostream &os, Indent indent ) const;

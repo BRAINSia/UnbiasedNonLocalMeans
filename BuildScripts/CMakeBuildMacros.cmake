@@ -35,7 +35,6 @@ macro(CHECKIFSLICER3BUILD)
 endmacro(CHECKIFSLICER3BUILD)
 endif(NOT CHECKIFSLICER3BUILD)
 
-
 ##  In many cases sub-projects depending on SlicerExectuion Model
 ##  that can be built stand alone are combined in larger packages.
 ##  This logic will include SlicerExectionModel only if it

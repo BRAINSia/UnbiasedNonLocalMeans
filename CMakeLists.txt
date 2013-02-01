@@ -51,6 +51,10 @@ if(NOT ITK_FOUND)
     include(${ITK_USE_FILE})
 endif(NOT ITK_FOUND)
 
+if(ITK_VERSION_MAJOR LESS 4)
+    set(ITK_LIBRARIES ITKIO ITKNumerics ITKStatistics ITKAlgorithms ITKBasicFilters)
+endif(ITK_VERSION_MAJOR LESS 4)
+
 # For Slicer 4 builds, simply call the standard macro:
 if(Slicer_BINARY_DIR) # This variable exits only for Slicer4
 
@@ -73,7 +77,7 @@ else(Slicer_BINARY_DIR)
     set(CLP UnbiasedNonLocalMeans)
     set ( ${CLP}_SOURCE ${CLP}.cxx )
     CONFIGURESTANDALONEORSLICERPROPERTIES(${CLP} ${CLP}.xml "${${CLP}_SOURCE}" "" "${EXTRA_HEADERS}")
-    target_link_libraries( ${CLP} ITKIO ITKAlgorithms)
+    target_link_libraries( ${CLP} ${ITK_LIBRARIES} )
     
     INSTALL(TARGETS UnbiasedNonLocalMeans DESTINATION bin)
  
@@ -82,11 +86,7 @@ endif(Slicer_BINARY_DIR)
 
 if (BUILD_TESTING)
   add_executable(${CLP}_Compare ${CLP}_Compare.cxx)
-  target_link_libraries(${CLP}_Compare
-    ITKIO
-    ITKNumerics
-    ITKStatistics
-  )
+  target_link_libraries(${CLP}_Compare ${ITK_LIBRARIES} )
   
   set(TEST_DATA_DIR ${PROJECT_SOURCE_DIR}/TestData)
   if (Slicer_SOURCE_DIR)
