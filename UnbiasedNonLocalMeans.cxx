@@ -1,15 +1,15 @@
 /*=========================================================================
- 
+
  Program:   Diffusion Applications
  Language:  C++
  Module:    $HeadURL: http://svn.slicer.org/Slicer3/trunk/Applications/CLI/DiffusionApplications/dwiNoiseFilter/dwiNoiseFilter.cxx $
  Date:      $Date: 2008-11-25 18:46:58 +0100 (Tue, 25 Nov 2008) $
  Version:   $Revision: 7972 $
- 
+
  Copyright (c) Brigham and Women's Hospital (BWH) All Rights Reserved.
- 
+
  See License.txt or http://www.slicer.org/copyright/copyright.txt for details.
- 
+
  ==========================================================================*/
 
 #ifdef _WIN32
@@ -17,22 +17,6 @@
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
-
-
-
-#ifdef THISISASLICERBUILD
-
-#include "itkPluginUtilities.h"
-
-#else
-
-#ifdef SLICERV4
-#include "itkPluginUtilities.h"
-#else
-#include "SlicerExecutionModel/itkPluginUtilities.h"
-#endif
-
-#endif
 
 #include <itkImageFileWriter.h>
 #include <itkImageFileReader.h>
@@ -44,20 +28,42 @@
 // Specific includes:
 #include "itkNLMFilter.h"
 //--------------------------------------------------
-#define DIMENSION 3
+static const unsigned int DIMENSION=3;
+
+
+
+
+/* Copied locally to avoid complicated build dependancies */
+/* Origincal code taken from Slicer/Base/CLI/itkPluginUtilities.h */
+namespace UNLM {
+  //-----------------------------------------------------------------------------
+  /// Get the PixelType and ComponentType from fileName
+  static void GetImageType (std::string fileName,
+                     itk::ImageIOBase::IOPixelType &pixelType,
+                     itk::ImageIOBase::IOComponentType &componentType)
+    {
+      typedef itk::Image<unsigned char, 3> ImageType;
+      itk::ImageFileReader<ImageType>::Pointer imageReader = itk::ImageFileReader<ImageType>::New();
+      imageReader->SetFileName(fileName.c_str());
+      imageReader->UpdateOutputInformation();
+
+      pixelType = imageReader->GetImageIO()->GetPixelType();
+      componentType = imageReader->GetImageIO()->GetComponentType();
+    }
+}
 
 template<class PixelType>
 int DoIt( int argc, char * argv[], PixelType )
 {
 	PARSE_ARGS;
-    
+
 	// do the typedefs
 	typedef itk::Image<PixelType,DIMENSION> ImageType;
-	
+
 	typename itk::ImageFileReader<ImageType>::Pointer reader = itk::ImageFileReader<ImageType>::New();
 	reader->SetFileName( inputVolume.c_str() );
-	
-	
+
+
 	try
     {
 		reader->Update();
@@ -69,12 +75,12 @@ int DoIt( int argc, char * argv[], PixelType )
 		std::cerr << e.GetLocation() << std::endl;
 		return EXIT_FAILURE;
     }
-	
-	
+
+
 	typedef itk::NLMFilter< ImageType, ImageType > FilterType;
 	typename FilterType::Pointer filter = FilterType::New();
 	filter->SetInput( reader->GetOutput() );
-	
+
 	/** SET PARAMETERS TO THE FILTER */
 	// The power of noise:
 	filter->SetSigma( iSigma );
@@ -91,7 +97,7 @@ int DoIt( int argc, char * argv[], PixelType )
 	filter->SetH( iH );
 	// The preselection threshold:
 	filter->SetPSTh( iPs );
-	
+
 	// Run the filter:
 	try
     {
@@ -104,7 +110,7 @@ int DoIt( int argc, char * argv[], PixelType )
 		std::cerr << e.GetLocation() << std::endl;
 		return EXIT_FAILURE;
     }
-	
+
 	// Generate output image
 	typename itk::ImageFileWriter<ImageType>::Pointer writer = itk::ImageFileWriter<ImageType>::New();
 	writer->SetInput( filter->GetOutput() );
@@ -126,13 +132,13 @@ int DoIt( int argc, char * argv[], PixelType )
 int main( int argc, char * argv[] )
 {
     PARSE_ARGS;
-    
+
     itk::ImageIOBase::IOPixelType pixelType;
-    itk::ImageIOBase::IOComponentType componentType;    
-    itk::GetImageType (inputVolume, pixelType, componentType);
-    
+    itk::ImageIOBase::IOComponentType componentType;
+    UNLM::GetImageType (inputVolume, pixelType, componentType);
+
     // This filter handles all types
-    
+
     switch (componentType)
     {
 #ifndef WIN32
@@ -174,7 +180,7 @@ int main( int argc, char * argv[] )
             std::cout << "unknown component type" << std::endl;
             break;
     }
-    
+
     return EXIT_SUCCESS;
 }
 

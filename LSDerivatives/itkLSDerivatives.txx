@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -54,7 +54,7 @@ LSDerivativesL2< ImageDimension >
 	m_Radius     = 2;
 	m_Coordinate = 2;
 }
-//=====================================================================================================	
+//=====================================================================================================
 
 
 
@@ -89,32 +89,32 @@ void LSDerivativesL2< ImageDimension >
 
 
 
-	
 
-//=====================================================================================================	
+
+//=====================================================================================================
 template< class TInputImage >
 void LSDerivativesL0< TInputImage >
 ::GenerateInputRequestedRegion()
 {
 	// Call the superclass' implementation of this method
 	Superclass::GenerateInputRequestedRegion();
-		
+
 	// Get pointers to the input and output
 	InputImagePointer  inputPtr  = const_cast< TInputImage * >( this->GetInput() );
 	OutputImagePointer outputPtr = this->GetOutput();
-		
+
 	if ( !inputPtr || !outputPtr ){return;}
-		
+
 	InputSizeType size;
 	size.Fill( 0 );
 	if( m_Coordinate<TInputImage::ImageDimension )
 		size[m_Coordinate] = m_Radius;
-		
+
 	// Get a copy of the input requested region (should equal the output
 	// requested region)
 	InputRegionType inputRequestedRegion = inputPtr->GetRequestedRegion();
 	inputRequestedRegion.PadByRadius( size );
-		
+
 	// Crop the input requested region at the input's largest possible region
 	inputRequestedRegion.Crop( inputPtr->GetLargestPossibleRegion() );
 	inputPtr->SetRequestedRegion( inputRequestedRegion );
@@ -127,23 +127,23 @@ void LSDerivativesL1< ImageDimension >
 {
 	// Call the superclass' implementation of this method
 	Superclass::GenerateInputRequestedRegion();
-		
+
 	// Get pointers to the input and output
 	InputImagePointer  inputPtr  = const_cast< InputImageType* >( this->GetInput() );
 	OutputImagePointer outputPtr = this->GetOutput();
-		
+
 	if ( !inputPtr || !outputPtr ){return;}
-		
+
 	InputSizeType size;
 	size.Fill( 0 );
 	if( m_Coordinate < ImageDimension )
 		size[m_Coordinate] = m_Radius;
-		
+
 	// Get a copy of the input requested region (should equal the output
 	// requested region)
 	InputRegionType inputRequestedRegion = inputPtr->GetRequestedRegion();
 	inputRequestedRegion.PadByRadius( size );
-		
+
 	// Crop the input requested region at the input's largest possible region
 	inputRequestedRegion.Crop( inputPtr->GetLargestPossibleRegion() );
 	inputPtr->SetRequestedRegion( inputRequestedRegion );
@@ -156,31 +156,31 @@ void LSDerivativesL2< ImageDimension >
 {
 	// Call the superclass' implementation of this method
 	Superclass::GenerateInputRequestedRegion();
-		
+
 	// Get pointers to the input and output
 	InputImagePointer  inputPtr  = const_cast< InputImageType* >( this->GetInput() );
 	OutputImagePointer outputPtr = this->GetOutput();
-		
+
 	if ( !inputPtr || !outputPtr ){return;}
-		
+
 	InputSizeType size;
 	size.Fill( 0 );
 	if( m_Coordinate<ImageDimension )
 		size[m_Coordinate] = m_Radius;
-		
+
 	// Get a copy of the input requested region (should equal the output
 	// requested region)
 	InputRegionType inputRequestedRegion = inputPtr->GetRequestedRegion();
 	inputRequestedRegion.PadByRadius( size );
-		
+
 	// Crop the input requested region at the input's largest possible region
 	inputRequestedRegion.Crop( inputPtr->GetLargestPossibleRegion() );
 	inputPtr->SetRequestedRegion( inputRequestedRegion );
 	return;
 }
 //=====================================================================================================
-	
-	
+
+
 
 
 //=====================================================================================================
@@ -188,19 +188,19 @@ void LSDerivativesL2< ImageDimension >
 //=====================================================================================================
 //=====================================================================================================
 //=====================================================================================================
-//=====================================================================================================	
+//=====================================================================================================
 
 template< class TInputImage >
 #if ITK_VERSION_MAJOR < 4
 void LSDerivativesL0< TInputImage >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int )
 #else
 void LSDerivativesL0< TInputImage >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType )
 #endif
 {
 	// Boundary conditions for this filter; Neumann conditions are fine
-	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;	
+	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
 	// Iterators:
 	ConstNeighborhoodIterator<InputImageType>        bit;  // Iterator for the input image
 	ImageRegionIterator<OutputImageType>             it;   // Iterator for the output image
@@ -242,10 +242,10 @@ void LSDerivativesL0< TInputImage >
 	// Find the data-set boundary "faces"
 	typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType           faceList;
 	NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>                                  bC;
-	
+
 	faceList = bC( input, outputRegionForThread, size );
 	typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
-	
+
 	for ( fit=faceList.begin(); fit!=faceList.end(); ++fit ){ // Iterate through facets
 		bit = ConstNeighborhoodIterator<InputImageType>(     size, input, *fit  );
 		it  = ImageRegionIterator<OutputImageType>(          output,      *fit  );
@@ -274,14 +274,14 @@ void LSDerivativesL0< TInputImage >
 template< unsigned int ImageDimension >
 #if ITK_VERSION_MAJOR < 4
 void LSDerivativesL1< ImageDimension >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int )
 #else
 void LSDerivativesL1< ImageDimension >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType )
 #endif
 {
 	// Boundary conditions for this filter; Neumann conditions are fine
-	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;	
+	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
 	// Iterators:
 	ConstNeighborhoodIterator<InputImageType>        bit;  // Iterator for the input image
 	ImageRegionIterator<OutputImageType>             it;   // Iterator for the output image
@@ -323,10 +323,10 @@ void LSDerivativesL1< ImageDimension >
 	// Find the data-set boundary "faces"
 	typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType           faceList;
 	NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>                                  bC;
-	
+
 	faceList = bC( input, outputRegionForThread, size );
 	typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
-	
+
 	for ( fit=faceList.begin(); fit!=faceList.end(); ++fit ){ // Iterate through facets
 		bit = ConstNeighborhoodIterator<InputImageType>(     size, input, *fit  );
 		it  = ImageRegionIterator<OutputImageType>(          output,      *fit  );
@@ -353,20 +353,20 @@ void LSDerivativesL1< ImageDimension >
 }
 //=====================================================================================================
 //=====================================================================================================
-//=====================================================================================================	
+//=====================================================================================================
 template< unsigned int ImageDimension >
 
 
 #if ITK_VERSION_MAJOR < 4
 void LSDerivativesL2< ImageDimension >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int )
 #else
 void LSDerivativesL2< ImageDimension >
-::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId )
+::ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType )
 #endif
 {
 	// Boundary conditions for this filter; Neumann conditions are fine
-	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;	
+	ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
 	// Iterators:
 	ConstNeighborhoodIterator<InputImageType>        bit;  // Iterator for the input image
 	ImageRegionIterator<OutputImageType>             it;   // Iterator for the output image
@@ -408,10 +408,10 @@ void LSDerivativesL2< ImageDimension >
 	// Find the data-set boundary "faces"
 	typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType           faceList;
 	NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>                                  bC;
-	
+
 	faceList = bC( input, outputRegionForThread, size );
 	typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
-	
+
 	for ( fit=faceList.begin(); fit!=faceList.end(); ++fit ){ // Iterate through facets
 		bit = ConstNeighborhoodIterator<InputImageType>(     size, input, *fit  );
 		it  = ImageRegionIterator<OutputImageType>(          output,      *fit  );
@@ -438,9 +438,9 @@ void LSDerivativesL2< ImageDimension >
 	delete[] lpf;
 	delete[] hpf;
 }
-	
 
-	
+
+
 } // end namespace itk
 
 
