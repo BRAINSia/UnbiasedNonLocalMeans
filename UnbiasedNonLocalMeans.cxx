@@ -173,15 +173,12 @@ int main( int argc, char * argv[] )
             return DoIt( argc, argv, static_cast<float>(0));
             break;
         case itk::ImageIOBase::DOUBLE:
-            std::cout << "DOUBLE type not currently supported." << std::endl;
-            break;
+            std::cout << "WARNING:  DOUBLE type not currently supported, so defaulting to float." << std::endl;
         case itk::ImageIOBase::UNKNOWNCOMPONENTTYPE:
         default:
-            std::cout << "unknown component type" << std::endl;
+            std::cout << "WARNING:  UNKNOWN Component  type not currently supported, so defaulting to float." << std::endl;
+            return DoIt( argc, argv, static_cast<float>(0));
             break;
     }
-
     return EXIT_SUCCESS;
 }
-
-
