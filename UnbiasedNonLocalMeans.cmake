@@ -7,24 +7,19 @@ include(${CMAKE_CURRENT_LIST_DIR}/Common.cmake)
 
 ################################################################################
 
-
-#-----------------------------------------------------------------------------
-find_package(ITK REQUIRED)
-if(Slicer_BUILD_BRAINSTOOLS)
-  set(ITK_NO_IO_FACTORY_REGISTER_MANAGER 1)
-endif()
-include(${ITK_USE_FILE})
-
-if(ITK_VERSION_MAJOR LESS 4)
-    set(ITK_LIBRARIES ITKIO ITKNumerics ITKStatistics ITKAlgorithms ITKBasicFilters)
-endif(ITK_VERSION_MAJOR LESS 4)
-
-#-----------------------------------------------------------------------------
 find_package(SlicerExecutionModel REQUIRED GenerateCLP)
 include(${GenerateCLP_USE_FILE})
 include(${SlicerExecutionModel_USE_FILE})
 include(${SlicerExecutionModel_CMAKE_DIR}/SEMMacroBuildCLI.cmake)
 
+
+#-----------------------------------------------------------------------------
+find_package(ITK 4.7 REQUIRED)
+if(Slicer_BUILD_BRAINSTOOLS)
+  set(ITK_NO_IO_FACTORY_REGISTER_MANAGER 1)
+endif()
+include(${ITK_USE_FILE})
+#-----------------------------------------------------------------------------
 
 
 #-----------------------------------------------------------------------------
