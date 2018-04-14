@@ -84,17 +84,17 @@ public:
 	itkGetMacro( Coordinate, unsigned int );
 protected:
 	LSDerivativesL0();
-	virtual ~LSDerivativesL0() {}
+	~LSDerivativesL0() override {}
 	// Threaded filter!
 #if ITK_VERSION_MAJOR < 4
     void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId );
     
 #else
-    void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId );
+    void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId ) override;
     
 #endif
-	void BeforeThreadedGenerateData();
-	void GenerateInputRequestedRegion();
+	void BeforeThreadedGenerateData() override;
+	void GenerateInputRequestedRegion() override;
 private:
 	LSDerivativesL0(const Self&);   // purposely not implemented
 	void operator=(const Self&);    // purposely not implemented
@@ -144,17 +144,17 @@ private:
 		itkGetMacro( Coordinate, unsigned int );
 	protected:
 		LSDerivativesL1();
-		virtual ~LSDerivativesL1() {}
+		~LSDerivativesL1() override {}
 		// Threaded filter!
 #if ITK_VERSION_MAJOR < 4
         void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId );
         
 #else
-        void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId );
+        void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId ) override;
         
 #endif
-		void BeforeThreadedGenerateData();
-		void GenerateInputRequestedRegion();
+		void BeforeThreadedGenerateData() override;
+		void GenerateInputRequestedRegion() override;
 	private:
 		LSDerivativesL1(const Self&);   // purposely not implemented
 		void operator=(const Self&);    // purposely not implemented
@@ -204,17 +204,17 @@ private:
 		itkGetMacro( Coordinate, unsigned int );
 	protected:
 		LSDerivativesL2();
-		virtual ~LSDerivativesL2() {}
+		~LSDerivativesL2() override {}
 		// Threaded filter!
 #if ITK_VERSION_MAJOR < 4
         void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, int threadId );
         
 #else
-        void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId );
+        void ThreadedGenerateData( const OutputRegionType& outputRegionForThread, ThreadIdType threadId ) override;
         
 #endif
-		void BeforeThreadedGenerateData();
-		void GenerateInputRequestedRegion();
+		void BeforeThreadedGenerateData() override;
+		void GenerateInputRequestedRegion() override;
 	private:
 		LSDerivativesL2(const Self&);   // purposely not implemented
 		void operator=(const Self&);    // purposely not implemented
