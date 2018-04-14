@@ -31,7 +31,7 @@ NLMFilter< TInputImage, TOutputImage >
 {
 	if( TInputImage::ImageDimension!=3 )
 		itkExceptionMacro( << "This class is supported only for image dimension 3" );
-	m_Features      = NULL;
+	m_Features      = nullptr;
 	m_Sigma         = 25.0f;
 	m_H             = 1.2f;
 	m_PSTh          = 2.3f;
@@ -43,7 +43,7 @@ template< class TInputImage, class TOutputImage >
 NLMFilter< TInputImage, TOutputImage >
 ::~NLMFilter()
 {
-	m_Features      = NULL;
+	m_Features      = nullptr;
 }
 	
 	
@@ -94,9 +94,9 @@ void NLMFilter< TInputImage, TOutputImage >
 		l2->SetInput( l1->GetOutput() );
 		l2->Update();
 		m_Features = l2->GetOutput();
-		l0 = NULL;
-		l1 = NULL;
-		l2 = NULL;
+		l0 = nullptr;
+		l1 = nullptr;
+		l2 = nullptr;
 	}
 }
 	
